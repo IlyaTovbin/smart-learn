@@ -1,24 +1,13 @@
-import React from 'react';
-import './login.css';
-import Link from 'next/link'
+
+
+import { LoginForm } from '@/components/login-form';
 
 export default function LoginPage() {
   return (
-    <div className="login-container">
-      <h1>Login</h1>
-      <form className="login-form">
-        <label htmlFor="email">Email</label>
-        <input type="email" id="email" name="email" required />
-
-        <label htmlFor="password">Password</label>
-        <input type="password" id="password" name="password" required />
-      
-        <button type="submit">Login</button>
-      </form>
-
-      <p className="mt-5">
-        Don't have an account? <Link href="/register" className="register-link pointer">Register here.</Link>
-      </p>
+    <div className="flex min-h-svh w-full items-center justify-center p-6 md:p-10">
+      <div className="w-full max-w-sm">
+        <LoginForm mode="login" />
+      </div>
     </div>
   );
 }
