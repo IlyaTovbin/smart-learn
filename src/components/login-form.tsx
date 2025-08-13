@@ -1,3 +1,7 @@
+'use client'
+
+import React from "react"
+import { useRouter } from "next/navigation"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import {
@@ -19,6 +23,28 @@ export function LoginForm({
   mode = 'login',
   ...props
 }: LoginFormProps) {
+  // State for form fields and error
+  const [email, setEmail] = React.useState("");
+  const [password, setPassword] = React.useState("");
+  const [error, setError] = React.useState("");
+  const router = useRouter();
+
+  // Mock user
+  const mockUser = { email: "test@gmail.com", password: "123456" };
+
+  function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    setError("");
+    if (mode === "login") {
+      if (email === mockUser.email && password === mockUser.password) {
+        router.push("/dashboard");
+      } else {
+        setError("Invalid email or password");
+      }
+    }
+    // ...no-op for register mode...
+  }
+
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card>
@@ -33,7 +59,7 @@ export function LoginForm({
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form>
+          <form onSubmit={handleSubmit}>
             <div className="flex flex-col gap-6">
               <div className="grid gap-3">
                 <Label htmlFor="email">Email</Label>
@@ -42,6 +68,8 @@ export function LoginForm({
                   type="email"
                   placeholder="m@example.com"
                   required
+                  value={email}
+                  onChange={e => setEmail(e.target.value)}
                 />
               </div>
               <div className="grid gap-3">
@@ -56,13 +84,22 @@ export function LoginForm({
                     </a>
                   )}
                 </div>
-                <Input id="password" type="password" required />
+                <Input
+                  id="password"
+                  type="password"
+                  required
+                  value={password}
+                  onChange={e => setPassword(e.target.value)}
+                />
               </div>
               {mode === 'register' && (
                 <div className="grid gap-3">
                   <Label htmlFor="passwordCheck">Confirm Password</Label>
                   <Input id="passwordCheck" type="password" required />
                 </div>
+              )}
+              {error && (
+                <div className="text-red-500 text-sm">{error}</div>
               )}
               <div className="flex flex-col gap-3">
                 <Button type="submit" className="w-full">
